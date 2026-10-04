@@ -123,7 +123,7 @@ Después la secuencia pasa por la misma validación que una secuencia escrita a 
 
 ## Instalación
 
-No hacen falta librerías externas. Solo se necesita Python 3 con tkinter, que viene incluido en la instalación estándar de Python para Windows. `requirements.txt` no contiene dependencias.
+No hacen falta librerías externas. Solo se necesita Python 3 con tkinter, que viene incluido en la instalación estándar de Python para Windows. Por eso el proyecto no incluye fichero `requirements.txt`.
 
 ## Ejecución
 
@@ -147,7 +147,5 @@ Practica1_Dogma_Central/
 ├── dibujos.py         Esquemas gráficos (tkinter.Canvas) de cada etapa y del flujo completo
 ├── datos/
 │   └── lacZ.fasta     Gen lacZ de E. coli K-12 MG1655
-├── README.md
-├── requirements.txt
-└── .gitignore
+└── README.md
 ```
