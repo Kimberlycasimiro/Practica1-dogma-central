@@ -1,9 +1,3 @@
-"""Práctica 1 - Simulación del dogma central de la biología molecular.
-
-Interfaz gráfica (tkinter) que encadena: ADN -> ADN (replicación) -> ARNm (transcripción)
--> proteína (traducción). Cada pestaña muestra un esquema gráfico y debajo la explicación.
-"""
-
 import os
 import tkinter as tk
 from tkinter import ttk, messagebox
@@ -117,12 +111,12 @@ def main():
     marco_ayuda = ttk.LabelFrame(pestana_entrada, text=" Qué muestra cada pestaña ")
     marco_ayuda.pack(fill="x", padx=12, pady=(6, 12))
     ttk.Label(marco_ayuda, justify="left", font=("Segoe UI", 9), text=(
-        "2. Replicación: helicasa, primasa y cebadores, ADN polimerasa, cadena líder, cadena rezagada "
-        "con fragmentos de Okazaki, ADN ligasa y las dos moléculas hijas.\n"
-        "3. Transcripción: cadena molde y cadena codificante, ARN polimerasa, complementariedad "
-        "y orientación de las cadenas.\n"
-        "4. Traducción: lectura en codones desde AUG, ribosoma, ARNt con su anticodón, aminoácidos "
-        "y codón de parada.\n"
+        "2. Replicación: topoisomerasa, helicasa, proteínas SSB, primasa y cebadores, ADN polimerasa III y I,\n"
+        "    cadena líder, cadena rezagada con fragmentos de Okazaki, ADN ligasa y las dos moléculas hijas.\n"
+        "3. Transcripción: promotor y terminador, cadena molde y cadena codificante, ARN polimerasa,\n"
+        "    complementariedad y orientación de las cadenas.\n"
+        "4. Traducción: iniciación, elongación y terminación; codones desde AUG, ribosoma (subunidades\n"
+        "    y sitios P y A), ARNt con su anticodón, aminoácidos y factor de liberación en el STOP.\n"
         "5. Resultado: el flujo completo con los datos de esta ejecución.\n"
         "Los dibujos son esquemas didácticos; en secuencias largas solo se dibuja la primera parte."
     )).pack(anchor="w", padx=8, pady=6)

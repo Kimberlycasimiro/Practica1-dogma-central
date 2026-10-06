@@ -30,10 +30,15 @@ La secuencia introducida es la **cadena codificante**, escrita 5' → 3' de izqu
 
 ## Replicación (ADN → ADN)
 
+Se usan los nombres de las enzimas de *E. coli*, el organismo del gen real de ejemplo (*lacZ*).
+
+- **Topoisomerasa (girasa):** actúa por delante de la horquilla y alivia la tensión (superenrollamiento) que produce la apertura de la hélice.
 - **Helicasa:** separa las dos cadenas de ADN al abrir la doble hélice, rompiendo los puentes de hidrógeno entre las bases.
+- **Proteínas SSB:** se unen a las hebras sencillas recién separadas y evitan que se vuelvan a emparejar antes de ser copiadas.
 - **Primasa:** coloca los cebadores que permiten iniciar la síntesis.
 - **Cebadores:** fragmentos cortos de ARN que aportan el extremo 3' libre que necesita la ADN polimerasa. En el programa aparecen en minúsculas, con U en lugar de T y en color naranja.
-- **ADN polimerasa:** añade nucleótidos complementarios (A-T, C-G) y sintetiza la nueva cadena, siempre 5' → 3'. También sustituye el ARN de los cebadores por ADN.
+- **ADN polimerasa III:** añade nucleótidos complementarios (A-T, C-G) y sintetiza las nuevas cadenas, siempre 5' → 3'.
+- **ADN polimerasa I:** elimina los cebadores de ARN y los sustituye por ADN.
 - **Cadena líder:** su molde es la hebra 3' → 5'. Como crece 5' → 3' en el mismo sentido en que avanza la horquilla, se sintetiza de forma **continua** con un único cebador en el origen.
 - **Cadena rezagada:** su molde es la hebra 5' → 3'. Para crecer 5' → 3' tiene que avanzar en sentido contrario a la horquilla, así que se sintetiza de forma **discontinua**.
 - **Fragmentos de Okazaki:** son los trozos de la cadena rezagada. Cada uno empieza con su propio cebador en el extremo 5'. El fragmento 1 es el más cercano al origen.
@@ -44,14 +49,13 @@ La secuencia introducida es la **cadena codificante**, escrita 5' → 3' de izqu
 
 1. La horquilla en un instante intermedio:
    - las hebras parentales separadas y, a la derecha, la doble hélice todavía sin abrir;
-   - la helicasa en el punto de apertura;
-   - la cadena líder completa hasta la horquilla, con su ADN polimerasa;
+   - la topoisomerasa por delante de la horquilla y la helicasa en el punto de apertura;
+   - proteínas SSB sobre las hebras sencillas;
+   - la cadena líder completa hasta la horquilla, con su ADN polimerasa III;
    - los fragmentos de Okazaki con sus flechas de síntesis (←);
-   - el último fragmento a medio sintetizar, con la primasa sobre su cebador y la ADN polimerasa en el hueco.
-2. La maduración de la rezagada: fragmentos con cebador, cebadores sustituidos por ADN, ligasa en cada mella y cadena completa.
+   - el último fragmento a medio sintetizar, con la primasa sobre su cebador y la ADN polimerasa III en el hueco.
+2. La maduración de la rezagada: fragmentos con cebador, ADN polimerasa I sustituyendo los cebadores por ADN, ligasa en cada mella y cadena completa.
 3. Las dos moléculas hijas, coloreadas según si cada hebra es parental o nueva.
-
-Los fragmentos tienen 6 nucleótidos y los cebadores 2. Son tamaños didácticos, porque los reales son mucho mayores.
 
 ## Transcripción (ADN → ARNm)
 
@@ -59,10 +63,11 @@ Se transcribe una de las moléculas hijas obtenidas en la replicación.
 
 - **Cadena codificante:** la hebra 5' → 3'. Tiene la misma secuencia que el ARNm, salvo que lleva T donde el ARN lleva U.
 - **Cadena molde:** la hebra complementaria (3' → 5'). Es la que lee la enzima.
-- **ARN polimerasa:** lee la cadena molde 3' → 5' y sintetiza el ARNm 5' → 3'. El ARNm es antiparalelo a la molde y paralelo a la codificante.
+- **ARN polimerasa:** se une al ADN en el **promotor**, lee la cadena molde 3' → 5' y sintetiza el ARNm 5' → 3'. Al llegar al **terminador** se separa y libera el ARNm. El ARNm es antiparalelo a la molde y paralelo a la codificante.
 - **Complementariedad molde → ARN:** A → U, T → A, C → G, G → C.
 
 **Esquema de la pestaña Transcripción:**
+- el promotor y el terminador en los extremos de la región transcrita;
 - las tres cadenas alineadas, con las bases coloreadas;
 - una flecha de complementariedad por cada base;
 - la ARN polimerasa y los sentidos de lectura y de síntesis;
@@ -74,14 +79,18 @@ Se transcribe una de las moléculas hijas obtenidas en la replicación.
 - **Codones:** el ARNm se lee 5' → 3' en grupos de tres nucleótidos, sin solapamiento.
 - **Código genético:** diccionario con los 64 codones, escrito en `traduccion.py`.
 - **Inicio (AUG):** la traducción empieza en el primer AUG (metionina). Los nucleótidos anteriores no se traducen. Si no hay AUG, se indica que no puede iniciarse la traducción.
-- **Parada (UAA, UAG, UGA):** la traducción termina en el primer codón de parada. Se muestra, pero no se añade a la proteína. Si no aparece ninguno, se avisa de que la proteína estaría incompleta.
+- **Parada (UAA, UAG, UGA):** ningún ARNt reconoce estos codones; los reconoce un **factor de liberación**. La traducción termina en el primer codón de parada, que se muestra pero no se añade a la proteína. Si no aparece ninguno, se avisa de que la proteína estaría incompleta.
 - **ARNt:** cada ARNt reconoce un codón mediante su anticodón, complementario y antiparalelo (codón 5' AUG 3' ↔ anticodón 3' UAC 5'), y transporta el aminoácido correspondiente.
-- **Ribosoma:** recorre el ARNm 5' → 3' y une los aminoácidos mediante enlaces peptídicos.
+- **Ribosoma:** formado por una **subunidad menor** y una **subunidad mayor**, con los sitios P y A. Recorre el ARNm 5' → 3' y une los aminoácidos mediante enlaces peptídicos.
+- **Fases:**
+  1. **Iniciación:** la subunidad menor se une al ARNm y localiza el primer AUG. El ARNt iniciador (Met) se coloca en el sitio P y se une la subunidad mayor.
+  2. **Elongación:** al sitio A llega el ARNt cuyo anticodón empareja con el codón. Su aminoácido se une a la cadena y el ribosoma avanza un codón.
+  3. **Terminación:** al llegar al codón de parada, el factor de liberación hace que se libere la proteína y que las subunidades se separen.
 
 **Esquema de la pestaña Traducción:**
 1. El ARNm dividido en codones, con el inicio y el STOP marcados.
-2. Un ribosoma en plena elongación, con los sitios P y A. El ARNt del sitio P lleva la cadena ya formada y al sitio A llega el siguiente ARNt.
-3. Una tabla gráfica codón → anticodón → aminoácido, en la que los aminoácidos aparecen unidos formando la proteína.
+2. Un ribosoma en plena elongación, con sus dos subunidades y los sitios P y A. El ARNt del sitio P lleva la cadena ya formada y al sitio A llega el siguiente ARNt. Al lado se explican las tres fases.
+3. Una tabla gráfica codón → anticodón → aminoácido, en la que los aminoácidos aparecen unidos formando la proteína y el STOP aparece asociado al factor de liberación.
 
 ## Resultado
 
@@ -113,6 +122,16 @@ Se puede escribir cualquier otra secuencia. Solo se admiten A, T, C y G, y se ig
 4. devuelve la secuencia en mayúsculas.
 
 Después la secuencia pasa por la misma validación que una secuencia escrita a mano.
+
+## Simplificaciones del modelo
+
+El simulador es didáctico. Estas simplificaciones son intencionadas y se indican también en la interfaz:
+
+- **Tamaño de fragmentos y cebadores:** los fragmentos de Okazaki tienen 6 nucleótidos y los cebadores 2. En procariotas los fragmentos tienen unos 1000-2000 nucleótidos y los cebadores unos 10. Se reducen para que se vean varios fragmentos en una secuencia corta.
+- **Una sola horquilla:** en la célula la replicación es bidireccional, con dos horquillas que salen del origen en sentidos opuestos. Aquí se representa una sola, con el origen en el extremo izquierdo.
+- **Región transcrita:** la secuencia introducida se considera la región entre el promotor y el terminador, así que se transcribe completa. No se buscan secuencias promotoras reales.
+- **Ribosoma en un solo instante:** se dibuja un momento de la elongación con los sitios P y A. Las fases de iniciación y terminación se explican con texto.
+- **Enzimas sin estructura:** las enzimas se representan como etiquetas en la posición donde actúan, no como moléculas con su forma real.
 
 ## Decisiones técnicas
 

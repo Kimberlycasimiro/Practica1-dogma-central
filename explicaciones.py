@@ -1,6 +1,6 @@
-"""Explicaciones en texto de cada etapa (parte inferior de cada pestaña).
+"""Explicaciones en texto de cada etapa.
 
-Estas funciones no calculan nada: reciben los resultados de replicacion.py,
+Estas funciones reciben los resultados de replicacion.py,
 transcripcion.py y traduccion.py y los convierten en texto para mostrarlos.
 """
 
@@ -77,12 +77,17 @@ def texto_replicacion(resultado):
 
     lineas.append("REPLICACIÓN DEL ADN  (ADN → ADN)")
     lineas.append("=" * 70)
-    lineas.append("Enzimas que intervienen:")
-    lineas.append("  Helicasa       Separa las dos cadenas de ADN al abrir la doble hélice.")
-    lineas.append("  Primasa        Coloca los cebadores que permiten iniciar la síntesis.")
-    lineas.append("  ADN polimerasa Añade nucleótidos complementarios y sintetiza la nueva")
-    lineas.append("                 cadena de ADN, siempre en dirección 5' → 3'.")
-    lineas.append("  ADN ligasa     Une los fragmentos de Okazaki de la cadena rezagada.")
+    lineas.append("Enzimas y proteínas que intervienen (nombres de E. coli, como el gen lacZ):")
+    lineas.append("  Topoisomerasa (girasa) Alivia la tensión (superenrollamiento) que se acumula")
+    lineas.append("                         por delante de la horquilla al abrir la hélice.")
+    lineas.append("  Helicasa               Separa las dos cadenas de ADN al abrir la doble hélice.")
+    lineas.append("  Proteínas SSB          Se unen a las hebras sencillas y evitan que se vuelvan")
+    lineas.append("                         a emparejar antes de ser copiadas.")
+    lineas.append("  Primasa                Coloca los cebadores que permiten iniciar la síntesis.")
+    lineas.append("  ADN polimerasa III     Añade nucleótidos complementarios y sintetiza la nueva")
+    lineas.append("                         cadena de ADN, siempre en dirección 5' → 3'.")
+    lineas.append("  ADN polimerasa I       Elimina los cebadores de ARN y los sustituye por ADN.")
+    lineas.append("  ADN ligasa             Une los fragmentos de Okazaki de la cadena rezagada.")
     lineas.append("")
 
     lineas.append("0) MOLÉCULA DE ADN INICIAL (doble hélice cerrada)")
@@ -91,9 +96,11 @@ def texto_replicacion(resultado):
     lineas.append("   3' " + inferior + " 5'")
     lineas.append("")
 
-    lineas.append("1) HELICASA: apertura de la doble hélice")
-    lineas.append("   La helicasa rompe los puentes de hidrógeno entre las bases y separa")
-    lineas.append("   las dos hebras parentales, que pasan a actuar como molde:")
+    lineas.append("1) APERTURA DE LA DOBLE HÉLICE: topoisomerasa, helicasa y SSB")
+    lineas.append("   La helicasa rompe los puentes de hidrógeno entre las bases y separa las dos")
+    lineas.append("   hebras parentales. Por delante, la topoisomerasa (girasa) evita que el ADN")
+    lineas.append("   se superenrolle. Las proteínas SSB mantienen separadas las hebras sencillas,")
+    lineas.append("   que pasan a actuar como molde:")
     lineas.append("   5' " + superior + " 3'   → molde de la cadena rezagada")
     lineas.append("")
     lineas.append("   3' " + inferior + " 5'   → molde de la cadena líder")
@@ -107,7 +114,7 @@ def texto_replicacion(resultado):
     lineas.append("           ↓")
     lineas.append("        Cebador (ARN)")
     lineas.append("           ↓")
-    lineas.append("        ADN polimerasa")
+    lineas.append("        ADN polimerasa III")
     lineas.append("           ↓")
     lineas.append("        Síntesis 5' → 3'")
     lineas.append("")
@@ -116,7 +123,7 @@ def texto_replicacion(resultado):
                   + str(len(resultado["fragmentos"])) + " cebadores)")
     lineas.append("")
 
-    lineas.append("3) ADN POLIMERASA: síntesis de las nuevas cadenas")
+    lineas.append("3) ADN POLIMERASA III: síntesis de las nuevas cadenas")
     lineas.append("")
     lineas.append(texto_horquilla(resultado))
     lineas.append("")
@@ -132,9 +139,9 @@ def texto_replicacion(resultado):
                       + "5' " + fragmento["secuencia_5_3"] + " 3'   cebador: " + fragmento["cebador"])
     lineas.append("")
 
-    lineas.append("4) SUSTITUCIÓN DE CEBADORES Y ADN LIGASA")
-    lineas.append("   Los cebadores de ARN (el de la cadena líder y el de cada fragmento) se eliminan")
-    lineas.append("   y la ADN polimerasa rellena el hueco con ADN. En la cadena rezagada quedan")
+    lineas.append("4) ADN POLIMERASA I Y ADN LIGASA")
+    lineas.append("   La ADN polimerasa I elimina los cebadores de ARN (el de la cadena líder y el")
+    lineas.append("   de cada fragmento) y rellena el hueco con ADN. En la cadena rezagada quedan")
     lineas.append("   fragmentos separados por mellas (marcadas con |):")
     lineas.append("     3' " + resultado["rezagada_con_huecos"] + " 5'")
     lineas.append("                ↓")
@@ -182,8 +189,12 @@ def texto_transcripcion(resultado):
     lineas.append("=" * 70)
     lineas.append("Se transcribe el ADN hijo 1 obtenido en la replicación.")
     lineas.append("")
-    lineas.append("ARN polimerasa: se une al ADN, separa localmente las dos hebras y usa una")
-    lineas.append("de ellas (la cadena molde) para sintetizar el ARN mensajero.")
+    lineas.append("ARN polimerasa: se une al ADN en el PROMOTOR, separa localmente las dos hebras")
+    lineas.append("y usa una de ellas (la cadena molde) para sintetizar el ARN mensajero. Al llegar")
+    lineas.append("al TERMINADOR se separa del ADN y libera el ARNm.")
+    lineas.append("")
+    lineas.append("Simplificación: la secuencia introducida se considera la región transcrita,")
+    lineas.append("es decir, lo que hay entre el promotor y el terminador.")
     lineas.append("")
     lineas.append("  - La ARN polimerasa lee la cadena molde en dirección 3' → 5'.")
     lineas.append("  - El ARNm se sintetiza en dirección 5' → 3'.")
@@ -230,14 +241,14 @@ def texto_ribosoma(codones, aminoacidos):
 
     return "\n".join([
         "                    RIBOSOMA",
-        "           ┌────────────────────────┐",
+        "           ┌──── subunidad mayor ───┐",
         "           │    " + aminoacido_p + "         " + aminoacido_a + "     │   ← aminoácidos",
         "           │     |           |      │",
         "           │    " + anticodon_p + "         " + anticodon_a + "     │   ← anticodones de los ARNt (3'→5')",
         "           │    :::         :::     │",
         "  5' ······┼─── " + codon_p + " ─────── " + codon_a + " ────┼······ 3'   ARNm",
         "           │   sitio P     sitio A  │",
-        "           └────────────────────────┘",
+        "           └──── subunidad menor ───┘",
         "              el ribosoma avanza 5' → 3', un codón cada vez →",
     ])
 
@@ -252,14 +263,19 @@ def texto_traduccion(resultado):
 
     lineas.append("TRADUCCIÓN  (ARNm → proteína)")
     lineas.append("=" * 70)
-    lineas.append("La traducción ocurre en el RIBOSOMA, que recorre el ARNm 5' → 3' leyendo")
-    lineas.append("un codón (3 nucleótidos) cada vez. Cada ARNt reconoce el codón mediante su")
-    lineas.append("anticodón y transporta el aminoácido correspondiente. El ribosoma une los")
-    lineas.append("aminoácidos formando la cadena polipeptídica.")
+    lineas.append("La traducción ocurre en el RIBOSOMA (subunidad menor + subunidad mayor), que")
+    lineas.append("recorre el ARNm 5' → 3' leyendo un codón (3 nucleótidos) cada vez. Cada ARNt")
+    lineas.append("reconoce el codón mediante su anticodón y transporta el aminoácido")
+    lineas.append("correspondiente. El ribosoma une los aminoácidos con enlaces peptídicos.")
     lineas.append("")
-    lineas.append("  - Inicio: el primer codón AUG (Met).")
-    lineas.append("  - Parada: UAA, UAG o UGA. Ningún ARNt los reconoce; la traducción termina")
-    lineas.append("    y la proteína se libera. STOP no es un aminoácido.")
+    lineas.append("  1. INICIACIÓN: la subunidad menor se une al ARNm y localiza el primer AUG.")
+    lineas.append("     El ARNt iniciador (anticodón UAC, con Met) se coloca en el sitio P y")
+    lineas.append("     después se une la subunidad mayor.")
+    lineas.append("  2. ELONGACIÓN: al sitio A llega el ARNt cuyo anticodón empareja con el")
+    lineas.append("     codón; su aminoácido se une a la cadena y el ribosoma avanza un codón.")
+    lineas.append("  3. TERMINACIÓN: al llegar a un codón de parada (UAA, UAG o UGA) no entra")
+    lineas.append("     ningún ARNt; lo reconoce un factor de liberación, la proteína se libera")
+    lineas.append("     y las subunidades se separan. STOP no es un aminoácido.")
     lineas.append("")
     lineas.append("ARNm 5' " + arnm + " 3'")
     lineas.append("")
@@ -297,7 +313,7 @@ def texto_traduccion(resultado):
         codon = codones[i]
         if codon in CODONES_STOP:
             anticodon = "ninguno"
-            aminoacido = "STOP (fin de la traducción)"
+            aminoacido = "STOP (factor de liberación: fin de la traducción)"
         else:
             anticodon = obtener_anticodon(codon)
             aminoacido = aminoacidos[i]
@@ -336,18 +352,18 @@ def texto_resultado(adn, replicacion, transcripcion, traduccion):
         "ADN INICIAL  (" + str(len(adn)) + " nucleótidos)",
         "   5' " + abreviar(adn) + " 3'",
         "      ↓",
-        "REPLICACIÓN  (helicasa, primasa, ADN polimerasa, ADN ligasa)",
+        "REPLICACIÓN  (topoisomerasa, helicasa, SSB, primasa, ADN polimerasa III y I, ADN ligasa)",
         "      ↓",
         "ADN HIJO  (1 hebra parental + 1 hebra nueva; se obtienen dos moléculas iguales)",
         "   5' " + abreviar(hijo["hebra_5_3"]) + " 3'",
         "   3' " + abreviar(hijo["hebra_3_5"]) + " 5'",
         "      ↓",
-        "TRANSCRIPCIÓN  (ARN polimerasa; lee la cadena molde 3'→5')",
+        "TRANSCRIPCIÓN  (ARN polimerasa; del promotor al terminador, lee la cadena molde 3'→5')",
         "      ↓",
         "ARNm",
         "   5' " + abreviar(transcripcion["arnm"]) + " 3'",
         "      ↓",
-        "TRADUCCIÓN  (ribosoma y ARNt; desde AUG hasta el codón de parada)",
+        "TRADUCCIÓN  (ribosoma y ARNt; iniciación en AUG, elongación, terminación en STOP)",
         "      ↓",
         "PROTEÍNA",
         "   " + proteina,

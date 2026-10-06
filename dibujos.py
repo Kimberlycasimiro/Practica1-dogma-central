@@ -13,11 +13,12 @@ ANCHO = 18            # píxeles que ocupa cada nucleótido
 LIMITE_DIBUJO = 48    # nucleótidos que se dibujan como máximo (múltiplo de TAMANO_FRAGMENTO)
 MAX_CODONES = 14      # codones que se dibujan como máximo en la traducción
 
-FUENTE_BASE = ("Consolas", 11, "bold")
-FUENTE_TITULO = ("Segoe UI", 12, "bold")
-FUENTE_NORMAL = ("Segoe UI", 9)
-FUENTE_NEGRITA = ("Segoe UI", 9, "bold")
-FUENTE_NOTA = ("Segoe UI", 9, "italic")
+# Tamaños negativos = píxeles: así el texto escala igual que las coordenadas del dibujo
+FUENTE_BASE = ("Consolas", -15, "bold")
+FUENTE_TITULO = ("Segoe UI", -16, "bold")
+FUENTE_NORMAL = ("Segoe UI", -12)
+FUENTE_NEGRITA = ("Segoe UI", -12, "bold")
+FUENTE_NOTA = ("Segoe UI", -12, "italic")
 
 TEXTO = "#37474f"
 PARENTAL = "#455a64"
@@ -33,7 +34,9 @@ FONDO_ARN = "#ffebee"
 PROTEINA = "#6a1b9a"
 FONDO_PROTEINA = "#e1bee7"
 
+TOPOISOMERASA = "#5d4037"
 HELICASA = "#f57f17"
+SSB = "#8d6e63"
 PRIMASA = "#ef6c00"
 ADN_POLIMERASA = "#7b1fa2"
 LIGASA = "#00897b"
@@ -198,13 +201,30 @@ def dibujar_replicacion(canvas, resultado):
     # La helicasa está en el punto donde se separan las dos hebras.
     dibujar_enzima(canvas, x_cerrada - 40, (y_cerrada_1 + y_cerrada_2) / 2, "Helicasa", HELICASA)
 
+    # La topoisomerasa actúa por delante de la horquilla, sobre el ADN aún sin abrir.
+    x_topo = x_cerrada + resto * ANCHO + 100
+    dibujar_enzima(canvas, x_topo, (y_cerrada_1 + y_cerrada_2) / 2, "Topoisomerasa", TOPOISOMERASA)
+    canvas.create_text(x_topo, y_cerrada_2 + 13, font=FUENTE_NORMAL, fill=TOPOISOMERASA,
+                       text="evita el superenrollamiento")
+
+    # Proteínas SSB sobre las hebras sencillas recién separadas (tramo diagonal).
+    for fraccion in [0.3, 0.6]:
+        x = x_fin + fraccion * (x_cerrada - x_fin)
+        y_arriba = (y_superior - 13) + fraccion * (y_cerrada_1 - y_superior)
+        y_abajo = (y_inferior + 13) + fraccion * (y_cerrada_2 - y_inferior)
+        canvas.create_oval(x - 7, y_arriba - 7, x + 7, y_arriba + 7, fill=SSB, outline="")
+        canvas.create_oval(x - 7, y_abajo - 7, x + 7, y_abajo + 7, fill=SSB, outline="")
+    x_etiqueta = x_fin + 0.6 * (x_cerrada - x_fin) + 12
+    canvas.create_text(x_etiqueta, (y_superior - 13) + 0.6 * (y_cerrada_1 - y_superior) - 8,
+                       anchor="w", font=FUENTE_NEGRITA, fill=SSB, text="SSB")
+
     # Cadena líder: un cebador en el origen y síntesis continua hasta la horquilla.
     lider = resultado["lider_con_cebador"][:p]
     dibujar_fila(canvas, x0, y_lider, lider, fondo=FONDO_LIDER)
     dibujar_extremos(canvas, x0, y_lider, p, "5'", "3'")
     etiqueta_fila(canvas, x0, y_lider, "Cadena líder", LIDER)
     dibujar_flecha(canvas, x0 + 2, y_lider - 20, x_fin + 4, y_lider - 20, LIDER)
-    dibujar_enzima(canvas, x_fin - 20, 248, "ADN pol", ADN_POLIMERASA)
+    dibujar_enzima(canvas, x_fin - 20, 248, "ADN pol III", ADN_POLIMERASA)
     canvas.create_line(x_fin - 10, 261, x_fin - ANCHO / 2, y_lider - 11, fill=ADN_POLIMERASA, width=2)
 
     # Cadena rezagada: fragmentos de Okazaki ya abiertos por la horquilla.
@@ -240,8 +260,8 @@ def dibujar_replicacion(canvas, resultado):
     x_polimerasa = x0 + (ultimo["inicio"] + hueco / 2) * ANCHO
     dibujar_enzima(canvas, x_cebador + 45, 200, "Primasa", PRIMASA)
     canvas.create_line(x_cebador + 30, 188, x_cebador + 4, y_rezagada + 11, fill=PRIMASA, width=2)
-    x_ovalo = max(x_polimerasa - 30, x0 + 40)   # que no se salga a la izquierda del origen
-    dibujar_enzima(canvas, x_ovalo, 222, "ADN pol", ADN_POLIMERASA)
+    x_ovalo = max(x_polimerasa - 30, x0 + 50)   # que no se salga a la izquierda del origen
+    dibujar_enzima(canvas, x_ovalo, 222, "ADN pol III", ADN_POLIMERASA)
     canvas.create_line(x_ovalo, 209, x_polimerasa, y_rezagada + 11, fill=ADN_POLIMERASA, width=2)
 
     nota(canvas, 20, 350, "Cadena líder: su molde es la hebra 3'→5'. Crece 5'→3' en el mismo sentido en que "
@@ -250,11 +270,11 @@ def dibujar_replicacion(canvas, resultado):
                           "sentido contrario a la horquilla, así que se sintetiza a trozos (Okazaki), "
                           "cada uno con su cebador.", REZAGADA)
     nota(canvas, 20, 390, "El último fragmento aún se está sintetizando: la primasa acaba de colocar su cebador "
-                          "y la ADN polimerasa lo alarga hacia su extremo 3' (izquierda).", REZAGADA)
+                          "y la ADN polimerasa III lo alarga hacia su extremo 3' (izquierda).", REZAGADA)
 
     # ---- 2. Maduración de la cadena rezagada ----
     y = 430
-    titulo(canvas, 20, y, "2. Cadena rezagada: sustitución de cebadores y unión con la ADN ligasa")
+    titulo(canvas, 20, y, "2. Cadena rezagada: la ADN polimerasa I sustituye los cebadores y la ADN ligasa une los fragmentos")
     separacion = 18
     dibujados = []
     for fragmento in fragmentos:
@@ -282,8 +302,9 @@ def dibujar_replicacion(canvas, resultado):
     dibujar_extremos(canvas, x0, y_sin, ancho_separado / ANCHO, "3'", "5'", parcial)
     etiqueta_fila(canvas, x0, y_con, "Fragmentos con cebador", REZAGADA)
     etiqueta_fila(canvas, x0, y_sin, "Cebadores → ADN", REZAGADA)
-    canvas.create_text(x0 + ancho_separado + 30, y_sin, anchor="w", font=FUENTE_NORMAL, fill=TEXTO,
-                       text="la ADN polimerasa sustituye el ARN del cebador por ADN")
+    dibujar_enzima(canvas, x0 + ancho_separado + 95, y_sin, "ADN pol I", ADN_POLIMERASA)
+    canvas.create_text(x0 + ancho_separado + 152, y_sin, anchor="w", font=FUENTE_NORMAL, fill=TEXTO,
+                       text="elimina el ARN de los cebadores y lo sustituye por ADN")
 
     dibujar_fila(canvas, x0, y_unida, resultado["rezagada"][:n], fondo=FONDOS_OKAZAKI[0])
     dibujar_extremos(canvas, x0, y_unida, n, "3'", "5'", parcial)
@@ -338,6 +359,12 @@ def dibujar_transcripcion(canvas, resultado):
     dibujar_flecha(canvas, x0, 75, x_final, 75, ARN_POLIMERASA, 3)
     canvas.create_text(x0, 62, anchor="w", font=FUENTE_NEGRITA, fill=ARN_POLIMERASA,
                        text="avance de la ARN polimerasa: lee la cadena molde 3' → 5'")
+    # La región dibujada se considera la región transcrita: entre el promotor y el terminador.
+    canvas.create_text(x0 - 8, 75, anchor="e", font=FUENTE_NEGRITA, fill=TEXTO, text="promotor ▸")
+    texto_terminador = "◂ terminador"
+    if parcial:
+        texto_terminador = "···  ◂ terminador"
+    canvas.create_text(x_final + 8, 75, anchor="w", font=FUENTE_NEGRITA, fill=TEXTO, text=texto_terminador)
 
     dibujar_fila(canvas, x0, y_codificante, codificante[:n], fondo="#eceff1", colorear_bases=True)
     dibujar_extremos(canvas, x0, y_codificante, n, "5'", "3'", parcial)
@@ -377,9 +404,9 @@ def dibujar_transcripcion(canvas, resultado):
     parejas = [("A", "U"), ("T", "A"), ("C", "G"), ("G", "C")]
     x = 55
     for base_adn, base_arn in parejas:
-        canvas.create_text(x, y + 47, text=base_adn, font=("Consolas", 16, "bold"), fill=COLOR_BASE[base_adn])
+        canvas.create_text(x, y + 47, text=base_adn, font=("Consolas", -21, "bold"), fill=COLOR_BASE[base_adn])
         dibujar_flecha(canvas, x + 14, y + 47, x + 46, y + 47)
-        canvas.create_text(x + 60, y + 47, text=base_arn, font=("Consolas", 16, "bold"), fill=COLOR_BASE[base_arn])
+        canvas.create_text(x + 60, y + 47, text=base_arn, font=("Consolas", -21, "bold"), fill=COLOR_BASE[base_arn])
         x += 120
 
     # Comparación de la cadena codificante con el ARNm.
@@ -512,8 +539,8 @@ def dibujar_traduccion(canvas, resultado):
 
     # ---- 2. El ribosoma en un instante de la elongación ----
     canvas.create_text(20, 160, anchor="w", font=FUENTE_NEGRITA, fill=TEXTO,
-                       text="2. El ribosoma: el ARNt del sitio P lleva la cadena en crecimiento y "
-                            "al sitio A llega el siguiente ARNt")
+                       text="2. El ribosoma durante la elongación: el ARNt del sitio P lleva la cadena "
+                            "en crecimiento y al sitio A llega el siguiente ARNt")
     if len(proteina) >= 2:
         i = min(2, len(proteina) - 2)
     else:
@@ -533,6 +560,9 @@ def dibujar_traduccion(canvas, resultado):
     canvas.create_oval(x_p - 85, 225, x_a + 85, y_arnm + 4, fill="#e0f2f1", outline=RIBOSOMA, width=2)
     canvas.create_oval(x_p - 75, y_arnm - 6, x_a + 75, y_arnm + 44, fill="#b2dfdb", outline=RIBOSOMA, width=2)
     canvas.create_text((x_p + x_a) / 2, 240, text="RIBOSOMA", font=FUENTE_TITULO, fill=RIBOSOMA)
+    canvas.create_text(x_p - 90, 262, anchor="e", font=FUENTE_NORMAL, fill=RIBOSOMA, text="subunidad mayor")
+    canvas.create_text(x_p - 80, y_arnm + 34, anchor="e", font=FUENTE_NORMAL, fill=RIBOSOMA,
+                       text="subunidad menor")
     canvas.create_text(x_p, y_arnm + 28, text="sitio P", font=FUENTE_NEGRITA, fill=RIBOSOMA)
     canvas.create_text(x_a, y_arnm + 28, text="sitio A", font=FUENTE_NEGRITA, fill=RIBOSOMA)
 
@@ -558,7 +588,7 @@ def dibujar_traduccion(canvas, resultado):
         canvas.create_text(x_a, y_anticodon, text="fin del\nARNm", justify="center",
                            font=FUENTE_NEGRITA, fill=ARN)
     elif codones[i + 1] in CODONES_STOP:
-        canvas.create_text(x_a, y_anticodon - 10, text="STOP:\nningún ARNt", justify="center",
+        canvas.create_text(x_a, y_anticodon - 10, text="STOP: factor\nde liberación", justify="center",
                            font=FUENTE_NEGRITA, fill=ARN)
     else:
         dibujar_arnt(canvas, x_a, y_anticodon, y_aminoacido, codones[i + 1], etiqueta_derecha=True)
@@ -570,16 +600,20 @@ def dibujar_traduccion(canvas, resultado):
 
     x_texto = x_a + 140
     explicaciones = [
-        "Cada ARNt reconoce un codón mediante su anticodón",
-        "(complementario y antiparalelo, escrito 3' → 5').",
-        "El ARNt transporta el aminoácido correspondiente.",
-        "El ribosoma une los aminoácidos mediante enlaces peptídicos",
-        "(flecha discontinua: el aminoácido del sitio A se une a la cadena).",
-        "Los codones de parada (UAA, UAG, UGA) no tienen ARNt:",
-        "la traducción termina y se libera la proteína.",
+        "INICIACIÓN: la subunidad menor se une al ARNm y localiza el primer AUG;",
+        "el ARNt iniciador (Met) ocupa el sitio P y se une la subunidad mayor.",
+        "",
+        "ELONGACIÓN (lo que muestra el dibujo): al sitio A llega el ARNt cuyo",
+        "anticodón (3' → 5') empareja con el codón. Su aminoácido se une a la",
+        "cadena con un enlace peptídico (flecha discontinua) y el ribosoma",
+        "avanza un codón.",
+        "",
+        "TERMINACIÓN: los codones de parada (UAA, UAG, UGA) no tienen ARNt;",
+        "los reconoce un factor de liberación, se libera la proteína y las",
+        "subunidades se separan.",
     ]
     for linea in range(len(explicaciones)):
-        canvas.create_text(x_texto, 230 + linea * 18, anchor="w", font=FUENTE_NORMAL, fill=TEXTO,
+        canvas.create_text(x_texto, 190 + linea * 17, anchor="w", font=FUENTE_NORMAL, fill=TEXTO,
                            text=explicaciones[linea])
 
     # ---- 3. Correspondencia codón → ARNt → aminoácido → proteína ----
@@ -609,7 +643,7 @@ def dibujar_traduccion(canvas, resultado):
         centro = x + 1.5 * ANCHO
         dibujar_codon(canvas, x, y_codon, codones[k], color_codon(codones[k], k))
         if aminoacidos[k] == "STOP":
-            canvas.create_text(centro, y_anti, text="ningún\nARNt", justify="center",
+            canvas.create_text(centro, y_anti, text="factor de\nliberación", justify="center",
                                font=FUENTE_NORMAL, fill=ARN)
             canvas.create_rectangle(centro - 22, y_aa - 14, centro + 22, y_aa + 14, fill="#ffcdd2", outline=ARN)
             canvas.create_text(centro, y_aa, text="STOP", font=FUENTE_NEGRITA, fill=ARN)
@@ -648,7 +682,7 @@ def dibujar_flujo(canvas, adn, replicacion, transcripcion, traduccion):
               ("  →  ", TEXTO, "transcripción"), ("ARN", ARN, ""), ("  →  ", TEXTO, "traducción"),
               ("PROTEÍNA", PROTEINA, "")]
     for texto, color, proceso in partes:
-        elemento = canvas.create_text(x, 35, text=texto, anchor="w", font=("Segoe UI", 20, "bold"), fill=color)
+        elemento = canvas.create_text(x, 35, text=texto, anchor="w", font=("Segoe UI", -27, "bold"), fill=color)
         caja = canvas.bbox(elemento)
         if proceso != "":
             canvas.create_text((caja[0] + caja[2]) / 2, 66, text=proceso, font=FUENTE_NOTA, fill=TEXTO)
@@ -671,12 +705,12 @@ def dibujar_flujo(canvas, adn, replicacion, transcripcion, traduccion):
         datos_proteina = ["No se sintetiza proteína."]
     else:
         if traduccion["codon_stop"] is not None:
-            parada = "codón de parada: " + traduccion["codon_stop"]
+            parada = "en " + traduccion["codon_stop"] + " (factor de liberación)"
         else:
-            parada = "sin codón de parada (proteína incompleta)"
+            parada = "no hay codón de parada (proteína incompleta)"
         datos_traduccion = [
-            "Ribosoma + ARNt · empieza en el AUG de la posición " + str(traduccion["inicio"] + 1),
-            str(len(traduccion["codones"])) + " codones leídos · " + parada,
+            "Ribosoma + ARNt · iniciación en el AUG de la posición " + str(traduccion["inicio"] + 1),
+            "elongación: " + str(len(traduccion["codones"])) + " codones leídos · terminación: " + parada,
         ]
         datos_proteina = [
             str(len(traduccion["proteina"])) + " aminoácidos",
@@ -687,13 +721,13 @@ def dibujar_flujo(canvas, adn, replicacion, transcripcion, traduccion):
         ("ADN INICIAL", "molécula", FONDO_PARENTAL, PARENTAL,
          [str(len(adn)) + " nucleótidos", "5' " + abreviar(adn) + " 3'"]),
         ("REPLICACIÓN", "ADN → ADN", "white", HELICASA,
-         ["Helicasa, primasa, ADN polimerasa y ADN ligasa",
+         ["Topoisomerasa, helicasa, SSB, primasa, ADN polimerasa III y I, ADN ligasa",
           "Líder: síntesis continua, 1 cebador  ·  Rezagada: " + texto_okazaki]),
         ("ADN HIJO (x2)", "molécula", FONDO_PARENTAL, PARENTAL,
          ["Semiconservativa: 1 hebra parental + 1 hebra nueva",
           "Idénticas a la molécula inicial: " + respuesta_identicas]),
         ("TRANSCRIPCIÓN", "ADN → ARN", "white", ARN_POLIMERASA,
-         ["ARN polimerasa · lee la cadena molde 3' → 5'", "sintetiza el ARNm 5' → 3'"]),
+         ["ARN polimerasa · del promotor al terminador", "lee la cadena molde 3' → 5' y sintetiza el ARNm 5' → 3'"]),
         ("ARNm", "molécula", FONDO_ARN, ARN,
          [str(len(transcripcion["arnm"])) + " nucleótidos", "5' " + abreviar(transcripcion["arnm"]) + " 3'"]),
         ("TRADUCCIÓN", "ARN → PROTEÍNA", "white", RIBOSOMA, datos_traduccion),
@@ -709,7 +743,7 @@ def dibujar_flujo(canvas, adn, replicacion, transcripcion, traduccion):
         if es_proceso:
             grosor = 3
         canvas.create_rectangle(40, y, 300, y + alto, fill=relleno, outline=color, width=grosor)
-        canvas.create_text(170, y + 17, text=nombre, font=("Segoe UI", 12, "bold"), fill=color)
+        canvas.create_text(170, y + 17, text=nombre, font=("Segoe UI", -16, "bold"), fill=color)
         canvas.create_text(170, y + 35, text=subtitulo, font=FUENTE_NORMAL, fill=TEXTO)
         for linea in range(len(detalles)):
             canvas.create_text(325, y + 15 + linea * 19, text=detalles[linea], anchor="w",
