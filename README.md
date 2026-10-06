@@ -17,6 +17,26 @@ Cada etapa tiene su propia pestaña con dos partes:
 - **Esquema gráfico** (dibujado con `tkinter.Canvas`) construido con las secuencias reales de la simulación.
 - **Explicación en texto**, paso a paso, con las enzimas, las moléculas y la orientación 5'/3' de todas las cadenas.
 
+## Estructura
+
+```text
+Practica1_Dogma_Central/
+├── main.py            Interfaz tkinter: pestañas, botones y orden de la simulación
+├── secuencias.py      Lectura del fichero FASTA, limpieza y validación de la secuencia de ADN
+│
+├── replicacion.py     Cálculo: complementariedad, cadena líder, fragmentos de Okazaki, ligasa y moléculas hijas
+├── transcripcion.py   Cálculo: transcripción de la cadena molde a ARNm
+├── traduccion.py      Cálculo: código genético, búsqueda de AUG, codones, anticodones y STOP
+│
+├── explicaciones.py   Presentación: textos explicativos de cada pestaña
+├── dibujos.py         Presentación: esquemas gráficos de cada etapa y del flujo completo
+│
+├── datos/
+│   └── lacZ.fasta     Gen lacZ de E. coli K-12 MG1655
+└── README.md
+```
+
+
 ## Objetivos
 
 - Comprender de forma integrada la replicación, la transcripción y la traducción.
@@ -27,6 +47,7 @@ Cada etapa tiene su propia pestaña con dos partes:
 ## Convenio de orientación
 
 La secuencia introducida es la **cadena codificante**, escrita 5' → 3' de izquierda a derecha. La hebra complementaria se escribe alineada debajo, es decir, 3' → 5'. En la replicación el origen está en el extremo izquierdo y la horquilla avanza hacia la derecha.
+![Descripción de la imagen](img/Captura de pantalla 2026-10-06 170653.png)
 
 ## Replicación (ADN → ADN)
 
@@ -54,8 +75,11 @@ Se usan los nombres de las enzimas de *E. coli*, el organismo del gen real de ej
    - la cadena líder completa hasta la horquilla, con su ADN polimerasa III;
    - los fragmentos de Okazaki con sus flechas de síntesis (←);
    - el último fragmento a medio sintetizar, con la primasa sobre su cebador y la ADN polimerasa III en el hueco.
+   ![Descripción de la imagen](img/Captura de pantalla 2026-10-06 170236.png)
+
 2. La maduración de la rezagada: fragmentos con cebador, ADN polimerasa I sustituyendo los cebadores por ADN, ligasa en cada mella y cadena completa.
 3. Las dos moléculas hijas, coloreadas según si cada hebra es parental o nueva.
+![Descripción de la imagen](img/Captura de pantalla 2026-10-06 170330.png)
 
 ## Transcripción (ADN → ARNm)
 
@@ -73,6 +97,7 @@ Se transcribe una de las moléculas hijas obtenidas en la replicación.
 - la ARN polimerasa y los sentidos de lectura y de síntesis;
 - un cuadro con las reglas de complementariedad;
 - una comparación entre la cadena codificante y el ARNm, que resalta las posiciones en las que la T pasa a ser U.
+  ![Descripción de la imagen](img/Captura de pantalla 2026-10-06 170455.png)
 
 ## Traducción (ARNm → proteína)
 
@@ -91,6 +116,7 @@ Se transcribe una de las moléculas hijas obtenidas en la replicación.
 1. El ARNm dividido en codones, con el inicio y el STOP marcados.
 2. Un ribosoma en plena elongación, con sus dos subunidades y los sitios P y A. El ARNt del sitio P lleva la cadena ya formada y al sitio A llega el siguiente ARNt. Al lado se explican las tres fases.
 3. Una tabla gráfica codón → anticodón → aminoácido, en la que los aminoácidos aparecen unidos formando la proteína y el STOP aparece asociado al factor de liberación.
+![Descripción de la imagen](img/Captura de pantalla 2026-10-06 170540.png)
 
 ## Resultado
 
@@ -101,6 +127,7 @@ ADN inicial → replicación → ADN hijo (x2) → transcripción → ARNm → t
 ```
 
 Incluye la longitud del ADN y del ARNm, el número de fragmentos de Okazaki y de cebadores, la posición del AUG, los codones leídos, el codón de parada y la proteína con su longitud.
+![Descripción de la imagen](img/Captura de pantalla 2026-10-06 170621.png)
 
 ## Ejemplos
 
@@ -156,21 +183,3 @@ python main.py
 2. Pulsar **Ejecutar simulación**.
 3. Recorrer las pestañas **Replicación**, **Transcripción**, **Traducción** y **Resultado**. En cada pestaña, la barra que separa el esquema de la explicación se puede arrastrar. El esquema se desplaza con la rueda del ratón, o con Mayús + rueda en horizontal.
 
-## Estructura
-
-```text
-Practica1_Dogma_Central/
-├── main.py            Interfaz tkinter: pestañas, botones y orden de la simulación
-├── secuencias.py      Lectura del fichero FASTA, limpieza y validación de la secuencia de ADN
-│
-├── replicacion.py     Cálculo: complementariedad, cadena líder, fragmentos de Okazaki, ligasa y moléculas hijas
-├── transcripcion.py   Cálculo: transcripción de la cadena molde a ARNm
-├── traduccion.py      Cálculo: código genético, búsqueda de AUG, codones, anticodones y STOP
-│
-├── explicaciones.py   Presentación: textos explicativos de cada pestaña
-├── dibujos.py         Presentación: esquemas gráficos de cada etapa y del flujo completo
-│
-├── datos/
-│   └── lacZ.fasta     Gen lacZ de E. coli K-12 MG1655
-└── README.md
-```
