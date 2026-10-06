@@ -168,10 +168,9 @@ Practica1_Dogma_Central/
 ├── traduccion.py      Cálculo: código genético, búsqueda de AUG, codones, anticodones y STOP
 │
 ├── explicaciones.py   Presentación: textos explicativos de cada pestaña
-├── dibujos.py         Presentación: esquemas gráficos (tkinter.Canvas) de cada etapa y del flujo completo
+├── dibujos.py         Presentación: esquemas gráficos de cada etapa y del flujo completo
 │
 ├── datos/
 │   └── lacZ.fasta     Gen lacZ de E. coli K-12 MG1655
-├── README.md
-└── .gitignore         Excluye de Git los archivos generados (__pycache__, *.pyc) y los del editor
+└── README.md
 ```
