@@ -1,6 +1,6 @@
 # Práctica 1 - Simulación del dogma central de la biología molecular
 
-**Asignatura:** Bioinformática. Escuela de Ingeniería Informática, ULPGC
+**Asignatura:** Bioinformática. Escuela de Ingeniería Informática, ULPGC  
 **Autoras:** Kimberly Casimiro Torres y Leonoor Antje Barton
 
 ## Descripción
