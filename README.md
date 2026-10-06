@@ -116,8 +116,7 @@ Después la secuencia pasa por la misma validación que una secuencia escrita a 
 
 ## Decisiones técnicas
 
-- **Python + tkinter.** tkinter viene con Python, y su `Canvas` basta para dibujar esquemas con rectángulos, óvalos, líneas, flechas y texto. No hacen falta OpenCV, NumPy ni otras librerías.
-- **Biopython.** Se podría utilizar Biopython para el manejo de secuencias, ya que está permitido en la práctica. Sin embargo, para esta implementación se han programado directamente las operaciones básicas utilizadas en la simulación, de forma que la lógica de complementariedad, transcripción y traducción quede explícita.
+- **Python + tkinter.** tkinter viene con Python, y su `Canvas` basta para dibujar esquemas con rectángulos, óvalos, líneas, flechas y texto.
 - **Separación entre cálculo y presentación.**
   - `replicacion.py`, `transcripcion.py` y `traduccion.py` solo calculan: cada uno hace un proceso biológico y devuelve sus resultados.
   - `explicaciones.py` (textos) y `dibujos.py` (esquemas) no calculan nada; solo muestran esos resultados.
@@ -126,7 +125,7 @@ Después la secuencia pasa por la misma validación que una secuencia escrita a 
 
 ## Instalación
 
-No hacen falta librerías externas. Solo se necesita Python 3 con tkinter, que viene incluido en la instalación estándar de Python para Windows. Por eso el proyecto no incluye fichero `requirements.txt`.
+No hacen falta librerías externas. Solo se necesita Python 3 con tkinter, que viene incluido en la instalación estándar de Python para Windows.
 
 ## Ejecución
 
@@ -154,5 +153,6 @@ Practica1_Dogma_Central/
 │
 ├── datos/
 │   └── lacZ.fasta     Gen lacZ de E. coli K-12 MG1655
-└── README.md
+├── README.md
+└── .gitignore         Excluye de Git los archivos generados (__pycache__, *.pyc) y los del editor
 ```

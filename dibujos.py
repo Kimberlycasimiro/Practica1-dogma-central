@@ -657,6 +657,15 @@ def dibujar_flujo(canvas, adn, replicacion, transcripcion, traduccion):
     respuesta_identicas = "NO"
     if replicacion["hijo_1"]["hebra_5_3"] == replicacion["hijo_2"]["hebra_5_3"] == adn:
         respuesta_identicas = "sí"
+
+    # Cada fragmento de Okazaki empieza con su propio cebador.
+    numero_fragmentos = len(replicacion["fragmentos"])
+    if numero_fragmentos == 1:
+        texto_okazaki = "1 fragmento de Okazaki, 1 cebador"
+    else:
+        texto_okazaki = (str(numero_fragmentos) + " fragmentos de Okazaki, "
+                         + str(numero_fragmentos) + " cebadores (uno por fragmento)")
+
     if traduccion["inicio"] == -1:
         datos_traduccion = ["No se ha encontrado un codón de inicio AUG: no hay traducción."]
         datos_proteina = ["No se sintetiza proteína."]
@@ -679,8 +688,7 @@ def dibujar_flujo(canvas, adn, replicacion, transcripcion, traduccion):
          [str(len(adn)) + " nucleótidos", "5' " + abreviar(adn) + " 3'"]),
         ("REPLICACIÓN", "ADN → ADN", "white", HELICASA,
          ["Helicasa, primasa, ADN polimerasa y ADN ligasa",
-          "Cadena líder continua · " + str(len(replicacion["fragmentos"])) + " fragmentos de Okazaki · "
-          + str(len(replicacion["fragmentos"]) + 1) + " cebadores"]),
+          "Líder: síntesis continua, 1 cebador  ·  Rezagada: " + texto_okazaki]),
         ("ADN HIJO (x2)", "molécula", FONDO_PARENTAL, PARENTAL,
          ["Semiconservativa: 1 hebra parental + 1 hebra nueva",
           "Idénticas a la molécula inicial: " + respuesta_identicas]),
