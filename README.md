@@ -106,7 +106,7 @@ Se puede escribir cualquier otra secuencia. Solo se admiten A, T, C y G, y se ig
 
 ## Lectura FASTA
 
-`fasta.py` incluye un lector propio:
+`secuencias.py` incluye un lector propio:
 1. ignora la línea de cabecera, que empieza por `>`;
 2. une las líneas de secuencia;
 3. elimina espacios y saltos de línea;
@@ -118,7 +118,10 @@ Después la secuencia pasa por la misma validación que una secuencia escrita a 
 
 - **Python + tkinter.** tkinter viene con Python, y su `Canvas` basta para dibujar esquemas con rectángulos, óvalos, líneas, flechas y texto. No hacen falta OpenCV, NumPy ni otras librerías.
 - **Biopython.** Se podría utilizar Biopython para el manejo de secuencias, ya que está permitido en la práctica. Sin embargo, para esta implementación se han programado directamente las operaciones básicas utilizadas en la simulación, de forma que la lógica de complementariedad, transcripción y traducción quede explícita.
-- **Separación por procesos.** Cada proceso biológico tiene su módulo. La interfaz (`main.py`) y los dibujos (`dibujos.py`) solo muestran los resultados que calculan esos módulos.
+- **Separación entre cálculo y presentación.**
+  - `replicacion.py`, `transcripcion.py` y `traduccion.py` solo calculan: cada uno hace un proceso biológico y devuelve sus resultados.
+  - `explicaciones.py` (textos) y `dibujos.py` (esquemas) no calculan nada; solo muestran esos resultados.
+  - `main.py` construye la interfaz y conecta todo: lee la secuencia, ejecuta los tres procesos en orden y muestra los resultados en cada pestaña.
 - **Esquemas didácticos.** Los dibujos no son modelos moleculares realistas, sino esquemas simplificados construidos con los datos de la simulación. Para que las secuencias largas se puedan leer, solo se dibujan los primeros 48 nucleótidos o 14 codones. En el propio dibujo se indica que la representación es parcial y aparecen puntos suspensivos (`···`) al final de las cadenas. La explicación en texto incluye las secuencias completas.
 
 ## Instalación
@@ -139,12 +142,16 @@ python main.py
 
 ```text
 Practica1_Dogma_Central/
-├── main.py            Interfaz tkinter: pestañas, botones y texto del resumen final
-├── replicacion.py     Complementariedad, cadena líder, fragmentos de Okazaki, ligasa y moléculas hijas
-├── transcripcion.py   Transcripción de la cadena molde a ARNm
-├── traduccion.py      Código genético, búsqueda de AUG, codones, anticodones y STOP
-├── fasta.py           Lectura del fichero FASTA y validación de la secuencia de ADN
-├── dibujos.py         Esquemas gráficos (tkinter.Canvas) de cada etapa y del flujo completo
+├── main.py            Interfaz tkinter: pestañas, botones y orden de la simulación
+├── secuencias.py      Lectura del fichero FASTA, limpieza y validación de la secuencia de ADN
+│
+├── replicacion.py     Cálculo: complementariedad, cadena líder, fragmentos de Okazaki, ligasa y moléculas hijas
+├── transcripcion.py   Cálculo: transcripción de la cadena molde a ARNm
+├── traduccion.py      Cálculo: código genético, búsqueda de AUG, codones, anticodones y STOP
+│
+├── explicaciones.py   Presentación: textos explicativos de cada pestaña
+├── dibujos.py         Presentación: esquemas gráficos (tkinter.Canvas) de cada etapa y del flujo completo
+│
 ├── datos/
 │   └── lacZ.fasta     Gen lacZ de E. coli K-12 MG1655
 └── README.md

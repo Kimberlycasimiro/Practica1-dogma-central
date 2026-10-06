@@ -5,10 +5,12 @@ Para que sigan siendo legibles, en secuencias largas solo se dibuja la primera p
 y se indica en el propio dibujo.
 """
 
-from replicacion import TAMANO_FRAGMENTO, LIMITE_DIBUJO
+from replicacion import TAMANO_FRAGMENTO
 from traduccion import CODONES_STOP, obtener_anticodon
+from explicaciones import abreviar, abreviar_proteina
 
 ANCHO = 18            # píxeles que ocupa cada nucleótido
+LIMITE_DIBUJO = 48    # nucleótidos que se dibujan como máximo (múltiplo de TAMANO_FRAGMENTO)
 MAX_CODONES = 14      # codones que se dibujan como máximo en la traducción
 
 FUENTE_BASE = ("Consolas", 11, "bold")
@@ -43,18 +45,6 @@ COLOR_BASE = {"A": "#2e7d32", "T": "#c62828", "U": "#8e24aa", "C": "#1565c0", "G
 
 
 # ---------------------------------------------------------------- utilidades
-
-def abreviar(secuencia, maximo=60):
-    """Acorta una secuencia larga dejando el principio y el final."""
-    if len(secuencia) <= maximo:
-        return secuencia
-    return secuencia[:30] + "..." + secuencia[-27:]
-
-
-def abreviar_proteina(aminoacidos, maximo=20):
-    if len(aminoacidos) <= maximo:
-        return "-".join(aminoacidos)
-    return "-".join(aminoacidos[:10]) + "-...-" + "-".join(aminoacidos[-5:])
 
 
 def x_columna(x0, i):

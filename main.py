@@ -8,58 +8,18 @@ import os
 import tkinter as tk
 from tkinter import ttk, messagebox
 
-from fasta import leer_fasta, limpiar_secuencia, validar_adn, buscar_caracteres_no_validos
-from replicacion import simular_replicacion, texto_replicacion
-from transcripcion import simular_transcripcion, texto_transcripcion
-from traduccion import traducir_arnm, texto_traduccion
-from dibujos import (abreviar, abreviar_proteina, dibujar_replicacion, dibujar_transcripcion,
-                     dibujar_traduccion, dibujar_flujo)
+from secuencias import leer_fasta, limpiar_secuencia, validar_adn, buscar_caracteres_no_validos
+from replicacion import simular_replicacion
+from transcripcion import simular_transcripcion
+from traduccion import traducir_arnm
+from explicaciones import texto_replicacion, texto_transcripcion, texto_traduccion, texto_resultado
+from dibujos import dibujar_replicacion, dibujar_transcripcion, dibujar_traduccion, dibujar_flujo
 
 # Secuencia corta para la demostración: AUG, cuatro aminoácidos más y codón de parada.
 SECUENCIA_EJEMPLO = "ATGAAACCCGGGTTTTAA"
 RUTA_LACZ = os.path.join(os.path.dirname(os.path.abspath(__file__)), "datos", "lacZ.fasta")
 FUENTE = ("Consolas", 10)
 COLOR_FONDO = "#f5f7f8"
-
-
-def texto_resultado(adn, replicacion, transcripcion, traduccion):
-    """Resumen del flujo completo ADN -> ADN -> ARN -> proteína."""
-    hijo = replicacion["hijo_1"]
-    if traduccion["inicio"] == -1:
-        proteina = "No se ha encontrado un codón de inicio AUG."
-    else:
-        proteina = abreviar_proteina(traduccion["proteina"])
-        if len(traduccion["proteina"]) > 20:
-            proteina += "   (completa en la pestaña Traducción)"
-        if traduccion["codon_stop"] is None:
-            proteina += "   (sin codón de parada: proteína incompleta)"
-
-    lineas = [
-        "RESULTADO: FLUJO DE LA INFORMACIÓN GENÉTICA",
-        "=" * 70,
-        "",
-        "ADN INICIAL  (" + str(len(adn)) + " nucleótidos)",
-        "   5' " + abreviar(adn) + " 3'",
-        "      ↓",
-        "REPLICACIÓN  (helicasa, primasa, ADN polimerasa, ADN ligasa)",
-        "      ↓",
-        "ADN HIJO  (1 hebra parental + 1 hebra nueva; se obtienen dos moléculas iguales)",
-        "   5' " + abreviar(hijo["hebra_5_3"]) + " 3'",
-        "   3' " + abreviar(hijo["hebra_3_5"]) + " 5'",
-        "      ↓",
-        "TRANSCRIPCIÓN  (ARN polimerasa; lee la cadena molde 3'→5')",
-        "      ↓",
-        "ARNm",
-        "   5' " + abreviar(transcripcion["arnm"]) + " 3'",
-        "      ↓",
-        "TRADUCCIÓN  (ribosoma y ARNt; desde AUG hasta el codón de parada)",
-        "      ↓",
-        "PROTEÍNA",
-        "   " + proteina,
-    ]
-    if traduccion["inicio"] != -1:
-        lineas.append("   Longitud: " + str(len(traduccion["proteina"])) + " aminoácidos")
-    return "\n".join(lineas)
 
 
 def crear_con_barras(marco, widget):
