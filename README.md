@@ -5,7 +5,8 @@
 **Universidad:** Universidad de Las Palmas de Gran Canaria (ULPGC)  
 **Año Académico:** 2026 / 2027   
 **Autoras:** Kimberly Casimiro Torres y Leonoor Antje Barton  
-**Repositorio:** [github.com/Kimberlycasimiro/Practica1-dogma-central](https://github.com/Kimberlycasimiro/Practica1-dogma-central)
+**Repositorio:** [Practica1-dogma-central](https://github.com/Kimberlycasimiro/Practica1-dogma-central)
+
 
 ## Descripción
 
